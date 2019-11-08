@@ -9,13 +9,13 @@
 }
 </style>
 
+
 <script>
 import wepy from '@wepy/core';
 import eventHub from './common/eventHub';
 import vuex from '@wepy/x';
 
 wepy.use(vuex);
-
 
 wepy.app({
   hooks: {
@@ -39,32 +39,34 @@ wepy.app({
   },
 
   methods: {
-
     sleep (s) {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
-          resolve('promise resolved')
-        }, s * 1000)
-      })
+          resolve('sleep promise resolved');
+        }, s * 1000);
+      });
     },
 
     async testAsync () {
       let d = await this.sleep(3);
-      console.log(d);
+      console.log('testAsync', d);
     }
   }
 });
 </script>
+
+
 <config>
 {
-    pages: [
-      'pages/index'
-    ],
-    window: {
-      backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
-    }
+  pages: [
+    'pages/index',
+    'pages/test'
+  ],
+  window: {
+    backgroundTextStyle: 'light',
+    navigationBarBackgroundColor: '#fff',
+    navigationBarTitleText: 'WeChat',
+    navigationBarTextStyle: 'black'
+  }
 }
 </config>

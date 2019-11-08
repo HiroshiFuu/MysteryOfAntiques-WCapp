@@ -3,11 +3,13 @@
 	"setting": {
 		"urlCheck": false,
 		"es6": false,
+		"enhance": false,
 		"postcss": true,
 		"minified": false,
 		"newFeature": true,
 		"coverView": true,
-		"autoAudits": true,
+		"nodeModules": false,
+		"autoAudits": false,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
 		"uploadWithSourceMap": true,
@@ -15,7 +17,8 @@
 			"ignore": [],
 			"disablePlugins": [],
 			"outputPath": ""
-		}
+		},
+		"bundle": false
 	},
 	"compileType": "miniprogram",
 	"appid": "wx6c0297780ea3b3a2",
@@ -23,5 +26,6 @@
 	"miniprogramRoot": "weapp/",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
+	"libVersion": "2.9.2",
 	"condition": {}
 }

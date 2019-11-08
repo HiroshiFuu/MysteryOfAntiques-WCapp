@@ -1,5 +1,5 @@
 {
-    "navigationBarTitleText": "Mystery Of Antiques",
+    "navigationBarTitleText": "WePY 2.0 Feature Demo",
     "component": true,
     "usingComponents": {
         "list": "../components/wepy-list",

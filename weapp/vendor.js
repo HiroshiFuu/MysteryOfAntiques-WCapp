@@ -34,7 +34,7 @@ var process = { env: {} };
    return __wepy_require;
 })([
 /***** module 0 start *****/
-/***** C:\Users\fenhao\OneDrive - Hewlett Packard Enterprise\Documents\WeChatProjects\MysteryOfAntiques\node_modules\@wepy\core\dist\wepy.js *****/
+/***** C:\Users\HiroshiTuu\Documents\MysteryOfAntiques-WCapp\node_modules\@wepy\core\dist\wepy.js *****/
 function(module, exports, __wepy_require) {'use strict';
 
 // can we use __proto__?
@@ -2689,7 +2689,7 @@ module.exports = wepy;
 
 
 /***** module 1 start *****/
-/***** C:\Users\fenhao\OneDrive - Hewlett Packard Enterprise\Documents\WeChatProjects\MysteryOfAntiques\node_modules\regenerator-runtime\runtime.js *****/
+/***** C:\Users\HiroshiTuu\Documents\MysteryOfAntiques-WCapp\node_modules\regenerator-runtime\runtime.js *****/
 function(module, exports, __wepy_require) {/**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
@@ -3422,7 +3422,7 @@ function(module, exports, __wepy_require) {/**
 
 
 /***** module 2 start *****/
-/***** C:\Users\fenhao\OneDrive - Hewlett Packard Enterprise\Documents\WeChatProjects\MysteryOfAntiques\node_modules\regenerator-runtime\runtime-module.js *****/
+/***** C:\Users\HiroshiTuu\Documents\MysteryOfAntiques-WCapp\node_modules\regenerator-runtime\runtime-module.js *****/
 function(module, exports, __wepy_require) {/**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
@@ -3463,7 +3463,7 @@ if (hadRuntime) {
 
 
 /***** module 3 start *****/
-/***** C:\Users\fenhao\OneDrive - Hewlett Packard Enterprise\Documents\WeChatProjects\MysteryOfAntiques\node_modules\vuex\dist\vuex.common.js *****/
+/***** C:\Users\HiroshiTuu\Documents\MysteryOfAntiques-WCapp\node_modules\vuex\dist\vuex.common.js *****/
 function(module, exports, __wepy_require) {/**
  * vuex v3.1.1
  * (c) 2019 Evan You
@@ -4480,7 +4480,7 @@ module.exports = index;
 
 
 /***** module 4 start *****/
-/***** C:\Users\fenhao\OneDrive - Hewlett Packard Enterprise\Documents\WeChatProjects\MysteryOfAntiques\node_modules\@wepy\x\dist\index.js *****/
+/***** C:\Users\HiroshiTuu\Documents\MysteryOfAntiques-WCapp\node_modules\@wepy\x\dist\index.js *****/
 function(module, exports, __wepy_require) {'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
