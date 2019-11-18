@@ -5,9 +5,11 @@ input {
   width: 200rpx;
   border-radius: 5rpx;
 }
+
 .info {
   padding-right: 10rpx;
 }
+
 .userinfo {
   display: flex;
   flex-direction: column;
@@ -23,6 +25,7 @@ input {
 .userinfo-nickname {
   color: #aaa;
 }
+
 .slide {
   width: 640rpx;
   display: flex;
@@ -30,10 +33,12 @@ input {
   font-size: 28rpx;
   align-items: center;
   box-sizing: border-box;
+
   .left {
     width: 750rpx;
     padding: 20rpx;
   }
+
   .right {
     display: flex;
     .right-item {
@@ -42,6 +47,10 @@ input {
       color: #fff;
     }
   }
+}
+
+view {
+  padding-right: 20px;
 }
 </style>
 
@@ -74,11 +83,13 @@ module.exports.getTime = getTime;
     <panel>
       <div class="title" slot="title">测试并发网络请求-创建游戏</div>
       <button @tap="request_create" size="mini"> 点我创建游戏 </button>
-      <div>返回结果: <text>{{req_res}}</text></div>
+      <div>返回结果: <text>{{request_create_res}}</text></div>
     </panel>
 
     <panel wx:if="{{game_created}}">
       <div class="title" slot="title">游戏角色</div>
+      <button @tap="test_load_character()" size="mini"> Load Character </button>
+      <div>返回结果: <text>{{test_load_character_res}}</text></div>
     </panel>
   </div>
 </template>
@@ -94,7 +105,7 @@ import testMixin from '../mixins/test'
 wepy.page({
   store,
   config: {
-    navigationBarTitleText: 'test'
+    navigationBarTitleText: 'MoA'
   },
 
   hooks: {
@@ -116,8 +127,13 @@ wepy.page({
     userInfo: {
       nickName: '加载中...'
     },
-    req_res: '',
+    request_create_res: '',
     game_created: false,
+    room_id: '',
+    test_load_character_res: '',
+  },
+
+  onLoad() {
   },
 
   methods: {
@@ -139,21 +155,40 @@ wepy.page({
     },
     request_create() {
       let self = this;
-      self.req_res = 'wait';
+      self.request_create_res = 'wait';
       wx.request({
         url: 'http://127.0.0.1:8000/GameMaster/CreateGame/',
         success: function(res) {
-          console.log('request_create', res);
+        console.log('request_create', res);
           if (res.statusCode !== 200) {
-            self.req_res = res.errMsg;
+            self.request_create_res = res.errMsg;
           } else {
-            self.req_res = 'Room ID: ' + res.data.room_id;
+            self.room_id = res.data.room_id;
+            self.request_create_res = 'Room ID: ' + self.room_id;
             self.game_created = true;
-            console.log('request_create', self.req_res, self.game_created);
+            console.log('request_create', self.room_id, self.game_created);
           }
         }
-      })
+      });
     },
+    test_load_character() {
+      let self = this;
+      self.test_load_character_res = 'wait';
+      wx.request({
+        url: 'http://127.0.0.1:8000/GameMaster/SetupGame/' + self.room_id,
+        success: function(res) {
+          console.log('test_load_characters', res);
+          if (res.statusCode !== 200) {
+            console.log('test_load_character Err', res.errMsg);
+          } else {
+            self.test_load_character_res = res.data.player.color + ' ' + res.data.character.name + ' ' + res.data.character.skill_description;
+            console.log('test_load_character',  res.data.player.color + ' ' + res.data.character.name + ' ' + res.data.character.skill_description);
+            console.log('test_load_character player_code',  res.data.player.player_code);
+          }
+        }
+      });
+    },
+
   },
 
   created() {

@@ -16,7 +16,7 @@ module.exports.getTime = getTime;
 <!----------   wxs end   ----------->
 
 <view class="container">
-  <view data-wpy-evt="16-0" bindtap="_proxy" class="userinfo">
+  <view data-wpy-evt="8-0" bindtap="_proxy" class="userinfo">
     <image src="{{ userInfo.avatarUrl }}" background-size="cover" class="userinfo-avatar"></image>
     <view class="userinfo-nickname">{{ userInfo.nickName }}</view>
   </view>
@@ -24,9 +24,9 @@ module.exports.getTime = getTime;
   <panel bind_init="_initComponent">
     <view slot="title" class="title">测试数据绑定</view>
 
-    <text data-wpy-evt="16-1" bindtap="_proxy" class="info">{{m1.getTime(currentTime)}}</text>
+    <text data-wpy-evt="8-1" bindtap="_proxy" class="info">{{m1.getTime(currentTime)}}</text>
     <text class="info">{{setTimeoutTitle}}</text>
-    <text data-wpy-evt="16-2" bindtap="_proxy" class="info">{{mixin}}</text>
+    <text data-wpy-evt="8-2" bindtap="_proxy" class="info">{{mixin}}</text>
     <text class="info">{{testcomputed}}</text>
     <text class="info">{{counter}}</text>
   </panel>
@@ -34,14 +34,14 @@ module.exports.getTime = getTime;
   <panel bind_init="_initComponent">
     <view slot="title" class="title">其它测试</view>
     
-    <button size="mini" data-wpy-evt="16-3" bindtap="_proxy">组件通信</button>
-    <button size="mini" data-wpy-evt="16-4" bindtap="_proxy">混合TAP事件</button>
+    <button size="mini" data-wpy-evt="8-3" bindtap="_proxy">组件通信</button>
+    <button size="mini" data-wpy-evt="8-4" bindtap="_proxy">混合TAP事件</button>
   </panel>
 
   <panel bind_init="_initComponent">
     <view slot="title" class="title">测试并发网络请求</view>
     <view>返回结果: <text>{{netrst}}</text></view>
-    <button size="mini" data-wpy-evt="16-5" bindtap="_proxy"> 点我发起10个请求 </button>
+    <button size="mini" data-wpy-evt="8-5" bindtap="_proxy"> 点我发起10个请求 </button>
   </panel>
 
    <panel bind_init="_initComponent">
@@ -57,13 +57,13 @@ module.exports.getTime = getTime;
 
     <text class="testcounter">全局计数器：</text>
     <view class="counterview">
-      <button size="mini" data-wpy-evt="16-6" bindtap="_proxy">全局计数器: {{mynum}}</button>
+      <button size="mini" data-wpy-evt="8-6" bindtap="_proxy">全局计数器: {{mynum}}</button>
     </view>
 
     <text class="testcounter">计数组件1 - num: </text>
     <view class="counterview">
 
-      <counter bind_init="_initComponent" data-wpy-evt="16-7" bindindex-emit="_proxy"></counter>
+      <counter bind_init="_initComponent" data-wpy-evt="8-7" bindindex-emit="_proxy"></counter>
     </view>
 
     <text class="testcounter">计数组件2 - num.sync: </text>

@@ -16,23 +16,25 @@ module.exports.getTime = getTime;
 <!----------   wxs end   ----------->
 
 <view class="container">
-  <view data-wpy-evt="7-93" bindtap="_proxy" class="userinfo">
+  <view data-wpy-evt="7-108" bindtap="_proxy" class="userinfo">
     <image src="{{ userInfo.avatarUrl }}" background-size="cover" class="userinfo-avatar"></image>
     <view class="userinfo-nickname">{{ userInfo.nickName }}</view>
     
   </view>
 
   <panel bind_init="_initComponent">
-    <button size="mini" data-wpy-evt="7-94" bindtap="_proxy"> 跳转测试页面 </button>
+    <button size="mini" data-wpy-evt="7-109" bindtap="_proxy"> 跳转测试页面 </button>
   </panel>
 
   <panel bind_init="_initComponent">
     <view slot="title" class="title">测试并发网络请求-创建游戏</view>
-    <button size="mini" data-wpy-evt="7-95" bindtap="_proxy"> 点我创建游戏 </button>
-    <view>返回结果: <text>{{req_res}}</text></view>
+    <button size="mini" data-wpy-evt="7-110" bindtap="_proxy"> 点我创建游戏 </button>
+    <view>返回结果: <text>{{request_create_res}}</text></view>
   </panel>
 
   <panel bind_init="_initComponent" wx:if="{{game_created}}">
     <view slot="title" class="title">游戏角色</view>
+    <button size="mini" data-wpy-evt="7-111" bindtap="_proxy"> Load Character </button>
+    <view>返回结果: <text>{{test_load_character_res}}</text></view>
   </panel>
 </view>

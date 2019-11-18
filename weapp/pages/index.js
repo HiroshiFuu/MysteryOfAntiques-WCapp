@@ -15,7 +15,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 _core["default"].page({
   store: _store["default"],
   config: {
-    navigationBarTitleText: 'test'
+    navigationBarTitleText: 'MoA'
   },
   hooks: {
     // Page 级别 hook, 只对当前 Page 的 setData 生效。
@@ -36,9 +36,12 @@ _core["default"].page({
     userInfo: {
       nickName: '加载中...'
     },
-    req_res: '',
-    game_created: false
+    request_create_res: '',
+    game_created: false,
+    room_id: '',
+    test_load_character_res: ''
   },
+  onLoad: function onLoad() {},
   methods: {
     bindGetUserInfo: function bindGetUserInfo(e) {
       console.log('bindGetUserInfo', e.$wx.detail.userInfo); // this.data.userinfo = e.$wx.detail.userInfo;
@@ -56,18 +59,37 @@ _core["default"].page({
     },
     request_create: function request_create() {
       var self = this;
-      self.req_res = 'wait';
+      self.request_create_res = 'wait';
       wx.request({
         url: 'http://127.0.0.1:8000/GameMaster/CreateGame/',
         success: function success(res) {
           console.log('request_create', res);
 
           if (res.statusCode !== 200) {
-            self.req_res = res.errMsg;
+            self.request_create_res = res.errMsg;
           } else {
-            self.req_res = 'Room ID: ' + res.data.room_id;
+            self.room_id = res.data.room_id;
+            self.request_create_res = 'Room ID: ' + self.room_id;
             self.game_created = true;
-            console.log('request_create', self.req_res, self.game_created);
+            console.log('request_create', self.room_id, self.game_created);
+          }
+        }
+      });
+    },
+    test_load_character: function test_load_character() {
+      var self = this;
+      self.test_load_character_res = 'wait';
+      wx.request({
+        url: 'http://127.0.0.1:8000/GameMaster/SetupGame/' + self.room_id,
+        success: function success(res) {
+          console.log('test_load_characters', res);
+
+          if (res.statusCode !== 200) {
+            console.log('test_load_character Err', res.errMsg);
+          } else {
+            self.test_load_character_res = res.data.player.color + ' ' + res.data.character.name + ' ' + res.data.character.skill_description;
+            console.log('test_load_character', res.data.player.color + ' ' + res.data.character.name + ' ' + res.data.character.skill_description);
+            console.log('test_load_character player_code', res.data.player.player_code);
           }
         }
       });
@@ -82,25 +104,32 @@ _core["default"].page({
       }
     });
   }
-}, {info: {"components":{"list":{"path":"..\\components\\wepy-list"},"group":{"path":"..\\components\\group"},"panel":{"path":"..\\components\\panel"},"counter":{"path":"..\\components\\counter"},"slide-view":{"path":"..\\$vendor\\miniprogram-slide-view\\miniprogram_dist\\index"}},"on":{}}, handlers: {'7-93': {"tap": function proxy () {
+}, {info: {"components":{"list":{"path":"..\\components\\wepy-list"},"group":{"path":"..\\components\\group"},"panel":{"path":"..\\components\\panel"},"counter":{"path":"..\\components\\counter"},"slide-view":{"path":"..\\$vendor\\miniprogram-slide-view\\miniprogram_dist\\index"}},"on":{}}, handlers: {'7-108': {"tap": function proxy () {
     var $event = arguments[arguments.length - 1];
     var _vm=this;
       return (function () {
         _vm.handleViewTap($event)
       })();
     
-  }},'7-94': {"tap": function proxy () {
+  }},'7-109': {"tap": function proxy () {
     var $event = arguments[arguments.length - 1];
     var _vm=this;
       return (function () {
         _vm.nav_test($event)
       })();
     
-  }},'7-95': {"tap": function proxy () {
+  }},'7-110': {"tap": function proxy () {
     var $event = arguments[arguments.length - 1];
     var _vm=this;
       return (function () {
         _vm.request_create($event)
+      })();
+    
+  }},'7-111': {"tap": function proxy () {
+    
+    var _vm=this;
+      return (function () {
+        _vm.test_load_character()
       })();
     
   }}}, models: {} });
