@@ -36,10 +36,16 @@ _core["default"].page({
     userInfo: {
       nickName: '加载中...'
     },
-    request_create_res: '',
+    create_game_res: '',
     game_created: false,
     room_id: '',
-    test_load_character_res: ''
+    test_load_character_res: '',
+    player_loaded: false,
+    player_code: '',
+    curZodiacs: [],
+    inspected_zodiac_res: '',
+    zodiacs_inspected: false,
+    next_player_select_res: ''
   },
   onLoad: function onLoad() {},
   methods: {
@@ -57,39 +63,89 @@ _core["default"].page({
       //   url:'pages/test'
       // });
     },
-    request_create: function request_create() {
+    create_game: function create_game() {
       var self = this;
-      self.request_create_res = 'wait';
+      self.create_game_res = 'wait';
       wx.request({
         url: 'http://127.0.0.1:8000/GameMaster/CreateGame/',
         success: function success(res) {
-          console.log('request_create', res);
+          console.log('create_game', res);
 
           if (res.statusCode !== 200) {
-            self.request_create_res = res.errMsg;
+            self.create_game_res = res.errMsg;
           } else {
             self.room_id = res.data.room_id;
-            self.request_create_res = 'Room ID: ' + self.room_id;
+            self.create_game_res = 'Room ID: ' + self.room_id;
             self.game_created = true;
-            console.log('request_create', self.room_id, self.game_created);
+            console.log('create_game', self.room_id, self.game_created);
           }
         }
       });
+    },
+    test_load_game: function test_load_game() {
+      var self = this;
+      self.room_id = 29698;
+      self.create_game_res = 'Room ID: ' + self.room_id;
+      self.game_created = true;
+      console.log('test_load_game', self.room_id, self.game_created);
     },
     test_load_character: function test_load_character() {
       var self = this;
       self.test_load_character_res = 'wait';
       wx.request({
-        url: 'http://127.0.0.1:8000/GameMaster/SetupGame/' + self.room_id,
+        url: 'http://127.0.0.1:8000/GameMaster/SetupGame/' + self.room_id + '/',
         success: function success(res) {
-          console.log('test_load_characters', res);
+          console.log('test_load_character', res);
 
           if (res.statusCode !== 200) {
             console.log('test_load_character Err', res.errMsg);
           } else {
             self.test_load_character_res = res.data.player.color + ' ' + res.data.character.name + ' ' + res.data.character.skill_description;
             console.log('test_load_character', res.data.player.color + ' ' + res.data.character.name + ' ' + res.data.character.skill_description);
-            console.log('test_load_character player_code', res.data.player.player_code);
+            self.player_code = res.data.player.player_code;
+            console.log('test_load_character player_code', self.player_code);
+            self.player_loaded = true;
+          }
+        }
+      });
+    },
+    test_reload_character: function test_reload_character() {
+      var self = this;
+      self.player_code = 766;
+      self.test_load_character_res = self.player_code;
+      self.player_loaded = true;
+      console.log('test_reload_character player_code', self.player_code);
+    },
+    test_load_zodiacs: function test_load_zodiacs() {
+      var self = this;
+      wx.request({
+        url: 'http://127.0.0.1:8000/GameMaster/TestLoadZodiacs/' + self.room_id + '/' + self.player_code,
+        success: function success(res) {
+          console.log('test_load_zodiacs', res);
+
+          if (res.statusCode !== 201) {
+            console.log('test_load_zodiacs Err', res.errMsg);
+          } else {
+            self.curZodiacs = res.data.zodiacs;
+            console.log('test_load_zodiacs', self.curZodiacs);
+          }
+        }
+      });
+    },
+    inspect_zodiac: function inspect_zodiac(pk, name) {
+      var self = this;
+      console.log('inspect_zodiac', pk, name);
+      wx.request({
+        url: 'http://127.0.0.1:8000/GameMaster/InspectZodiac/' + pk + '/',
+        success: function success(res) {
+          console.log('inspect_zodiac', res);
+
+          if (res.statusCode !== 200) {
+            console.log('inspect_zodiac Err', res.errMsg);
+          } else {
+            self.inspected_zodiac_res = '验证' + name + '为：' + res.data.genuine ? '真品' : '赝品';
+            self.zodiacs_inspected = true;
+            console.log('inspect_zodiac', self.zodiacs_inspected);
           }
         }
       });
@@ -104,32 +160,116 @@ _core["default"].page({
       }
     });
   }
-}, {info: {"components":{"list":{"path":"..\\components\\wepy-list"},"group":{"path":"..\\components\\group"},"panel":{"path":"..\\components\\panel"},"counter":{"path":"..\\components\\counter"},"slide-view":{"path":"..\\$vendor\\miniprogram-slide-view\\miniprogram_dist\\index"}},"on":{}}, handlers: {'7-108': {"tap": function proxy () {
+}, {info: {"components":{"list":{"path":"..\\components\\wepy-list"},"group":{"path":"..\\components\\group"},"panel":{"path":"..\\components\\panel"},"counter":{"path":"..\\components\\counter"},"slide-view":{"path":"..\\$vendor\\miniprogram-slide-view\\miniprogram_dist\\index"}},"on":{}}, handlers: {'7-523': {"tap": function proxy () {
     var $event = arguments[arguments.length - 1];
     var _vm=this;
       return (function () {
         _vm.handleViewTap($event)
       })();
     
-  }},'7-109': {"tap": function proxy () {
+  }},'7-524': {"tap": function proxy () {
     var $event = arguments[arguments.length - 1];
     var _vm=this;
       return (function () {
         _vm.nav_test($event)
       })();
     
-  }},'7-110': {"tap": function proxy () {
+  }},'7-525': {"tap": function proxy () {
     var $event = arguments[arguments.length - 1];
     var _vm=this;
       return (function () {
-        _vm.request_create($event)
+        _vm.create_game($event)
       })();
     
-  }},'7-111': {"tap": function proxy () {
+  }},'7-526': {"tap": function proxy () {
+    var $event = arguments[arguments.length - 1];
+    var _vm=this;
+      return (function () {
+        _vm.test_load_game($event)
+      })();
+    
+  }},'7-527': {"tap": function proxy () {
+    var $event = arguments[arguments.length - 1];
+    var _vm=this;
+      return (function () {
+        _vm.test_load_character($event)
+      })();
+    
+  }},'7-528': {"tap": function proxy () {
+    var $event = arguments[arguments.length - 1];
+    var _vm=this;
+      return (function () {
+        _vm.test_reload_character($event)
+      })();
+    
+  }},'7-529': {"tap": function proxy () {
+    var $event = arguments[arguments.length - 1];
+    var _vm=this;
+      return (function () {
+        _vm.test_load_zodiacs($event)
+      })();
+    
+  }},'7-530': {"tap": function proxy (item) {
     
     var _vm=this;
       return (function () {
-        _vm.test_load_character()
+        _vm.inspect_zodiac(item.pk, item.name)
+      })();
+    
+  }}}, models: {} }, {info: {"components":{"list":{"path":"..\\components\\wepy-list"},"group":{"path":"..\\components\\group"},"panel":{"path":"..\\components\\panel"},"counter":{"path":"..\\components\\counter"},"slide-view":{"path":"..\\$vendor\\miniprogram-slide-view\\miniprogram_dist\\index"}},"on":{}}, handlers: {'7-523': {"tap": function proxy () {
+    var $event = arguments[arguments.length - 1];
+    var _vm=this;
+      return (function () {
+        _vm.handleViewTap($event)
+      })();
+    
+  }},'7-524': {"tap": function proxy () {
+    var $event = arguments[arguments.length - 1];
+    var _vm=this;
+      return (function () {
+        _vm.nav_test($event)
+      })();
+    
+  }},'7-525': {"tap": function proxy () {
+    var $event = arguments[arguments.length - 1];
+    var _vm=this;
+      return (function () {
+        _vm.create_game($event)
+      })();
+    
+  }},'7-526': {"tap": function proxy () {
+    var $event = arguments[arguments.length - 1];
+    var _vm=this;
+      return (function () {
+        _vm.test_load_game($event)
+      })();
+    
+  }},'7-527': {"tap": function proxy () {
+    var $event = arguments[arguments.length - 1];
+    var _vm=this;
+      return (function () {
+        _vm.test_load_character($event)
+      })();
+    
+  }},'7-528': {"tap": function proxy () {
+    var $event = arguments[arguments.length - 1];
+    var _vm=this;
+      return (function () {
+        _vm.test_reload_character($event)
+      })();
+    
+  }},'7-529': {"tap": function proxy () {
+    var $event = arguments[arguments.length - 1];
+    var _vm=this;
+      return (function () {
+        _vm.test_load_zodiacs($event)
+      })();
+    
+  }},'7-530': {"tap": function proxy (item) {
+    
+    var _vm=this;
+      return (function () {
+        _vm.inspect_zodiac(item.pk, item.name)
       })();
     
   }}}, models: {} });

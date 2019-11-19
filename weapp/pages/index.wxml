@@ -16,25 +16,44 @@ module.exports.getTime = getTime;
 <!----------   wxs end   ----------->
 
 <view class="container">
-  <view data-wpy-evt="7-108" bindtap="_proxy" class="userinfo">
+  <view data-wpy-evt="7-523" bindtap="_proxy" class="userinfo">
     <image src="{{ userInfo.avatarUrl }}" background-size="cover" class="userinfo-avatar"></image>
     <view class="userinfo-nickname">{{ userInfo.nickName }}</view>
     
   </view>
 
   <panel bind_init="_initComponent">
-    <button size="mini" data-wpy-evt="7-109" bindtap="_proxy"> 跳转测试页面 </button>
+    <button size="mini" data-wpy-evt="7-524" bindtap="_proxy"> 跳转测试页面 </button>
   </panel>
 
   <panel bind_init="_initComponent">
     <view slot="title" class="title">测试并发网络请求-创建游戏</view>
-    <button size="mini" data-wpy-evt="7-110" bindtap="_proxy"> 点我创建游戏 </button>
-    <view>返回结果: <text>{{request_create_res}}</text></view>
+    <button size="mini" data-wpy-evt="7-525" bindtap="_proxy"> 点我创建游戏 </button>
+    <button size="mini" data-wpy-evt="7-526" bindtap="_proxy"> Load Game </button>
+    <view>返回结果: <text>{{create_game_res}}</text></view>
   </panel>
 
   <panel bind_init="_initComponent" wx:if="{{game_created}}">
     <view slot="title" class="title">游戏角色</view>
-    <button size="mini" data-wpy-evt="7-111" bindtap="_proxy"> Load Character </button>
+    <button size="mini" data-wpy-evt="7-527" bindtap="_proxy"> Load Character </button>
+    <button size="mini" data-wpy-evt="7-528" bindtap="_proxy"> ReLoad Character </button>
     <view>返回结果: <text>{{test_load_character_res}}</text></view>
+  </panel>
+
+  <panel bind_init="_initComponent" wx:if="{{player_loaded}}">
+    <button size="mini" data-wpy-evt="7-529" bindtap="_proxy"> Load Zodiacs </button>
+    <view slot="title" class="title">Inspect Zodiacs</view>
+    
+    <view class="zodiacs_list {{!zodiacs_inspected ? 'display_flex' : 'display_none'}}">
+      <view wx:for="{{ curZodiacs }}" wx:for-index="index" wx:for-item="item" wx:key="index" class="zodiac_holder">
+        <image src="http://127.0.0.1:8000{{item.zodiac_image_url}}" alt="{{item.name}}" data-wpy-evt="7-530" bindtap="_proxy" data-wpytap-a="{{ item }}" class="zodiac_item">
+      </image></view>
+    </view>
+    <view>返回结果: <text>{{inspected_zodiac_res}}</text></view>
+  </panel>
+
+  <panel bind_init="_initComponent" wx:if="{{zodiacs_inspected}}">
+    <view slot="title" class="title">Select Next Player</view>
+    <view>返回结果: <text>{{next_player_select_res}}</text></view>
   </panel>
 </view>

@@ -52,6 +52,30 @@ input {
 view {
   padding-right: 20px;
 }
+
+.display_flex {
+  display: flex !important;
+}
+
+.display_none {
+  display: none !important;
+}
+
+.zodiacs_list {
+  display: flex;
+  flex-direction: row;
+
+  .zodiac_holder {
+    flex: 1;
+    width: 20vw;
+    height: calc(20vw * 1.28);
+
+    .zodiac_item {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
 </style>
 
 
@@ -82,14 +106,35 @@ module.exports.getTime = getTime;
 
     <panel>
       <div class="title" slot="title">测试并发网络请求-创建游戏</div>
-      <button @tap="request_create" size="mini"> 点我创建游戏 </button>
-      <div>返回结果: <text>{{request_create_res}}</text></div>
+      <button @tap="create_game" size="mini"> 点我创建游戏 </button>
+      <button @tap="test_load_game" size="mini"> Load Game </button>
+      <div>返回结果: <text>{{create_game_res}}</text></div>
     </panel>
 
     <panel wx:if="{{game_created}}">
       <div class="title" slot="title">游戏角色</div>
-      <button @tap="test_load_character()" size="mini"> Load Character </button>
+      <button @tap="test_load_character" size="mini"> Load Character </button>
+      <button @tap="test_reload_character" size="mini"> ReLoad Character </button>
       <div>返回结果: <text>{{test_load_character_res}}</text></div>
+    </panel>
+
+    <panel wx:if="{{player_loaded}}">
+      <button @tap="test_load_zodiacs" size="mini"> Load Zodiacs </button>
+      <div class="title" slot="title">Inspect Zodiacs</div>
+      <!-- <div v-for="(item, index) in curZodiacs">
+        <div>Name: <text>{{item.name}}</text></div>
+      </div> -->
+      <div class="zodiacs_list {{!zodiacs_inspected ? 'display_flex' : 'display_none'}}">
+        <div class="zodiac_holder" v-for="(item, index) in curZodiacs">
+          <img src="http://127.0.0.1:8000{{item.zodiac_image_url}}" alt="{{item.name}}" class="zodiac_item" @tap="inspect_zodiac(item.pk, item.name)">
+        </div>
+      </div>
+      <div>返回结果: <text>{{inspected_zodiac_res}}</text></div>
+    </panel>
+
+    <panel wx:if="{{zodiacs_inspected}}">
+      <div class="title" slot="title">Select Next Player</div>
+      <div>返回结果: <text>{{next_player_select_res}}</text></div>
     </panel>
   </div>
 </template>
@@ -127,10 +172,16 @@ wepy.page({
     userInfo: {
       nickName: '加载中...'
     },
-    request_create_res: '',
+    create_game_res: '',
     game_created: false,
     room_id: '',
     test_load_character_res: '',
+    player_loaded: false,
+    player_code: '',
+    curZodiacs: [],
+    inspected_zodiac_res: '',
+    zodiacs_inspected: false,
+    next_player_select_res: '',
   },
 
   onLoad() {
@@ -153,37 +204,85 @@ wepy.page({
       //   url:'pages/test'
       // });
     },
-    request_create() {
+    create_game() {
       let self = this;
-      self.request_create_res = 'wait';
+      self.create_game_res = 'wait';
       wx.request({
         url: 'http://127.0.0.1:8000/GameMaster/CreateGame/',
         success: function(res) {
-        console.log('request_create', res);
+        console.log('create_game', res);
           if (res.statusCode !== 200) {
-            self.request_create_res = res.errMsg;
+            self.create_game_res = res.errMsg;
           } else {
             self.room_id = res.data.room_id;
-            self.request_create_res = 'Room ID: ' + self.room_id;
+            self.create_game_res = 'Room ID: ' + self.room_id;
             self.game_created = true;
-            console.log('request_create', self.room_id, self.game_created);
+            console.log('create_game', self.room_id, self.game_created);
           }
         }
       });
+    },
+    test_load_game() {
+      let self = this;
+      self.room_id = 29698;
+      self.create_game_res = 'Room ID: ' + self.room_id;
+      self.game_created = true;
+      console.log('test_load_game', self.room_id, self.game_created);
     },
     test_load_character() {
       let self = this;
       self.test_load_character_res = 'wait';
       wx.request({
-        url: 'http://127.0.0.1:8000/GameMaster/SetupGame/' + self.room_id,
+        url: 'http://127.0.0.1:8000/GameMaster/SetupGame/' + self.room_id + '/',
         success: function(res) {
-          console.log('test_load_characters', res);
+          console.log('test_load_character', res);
           if (res.statusCode !== 200) {
             console.log('test_load_character Err', res.errMsg);
           } else {
             self.test_load_character_res = res.data.player.color + ' ' + res.data.character.name + ' ' + res.data.character.skill_description;
             console.log('test_load_character',  res.data.player.color + ' ' + res.data.character.name + ' ' + res.data.character.skill_description);
-            console.log('test_load_character player_code',  res.data.player.player_code);
+            self.player_code = res.data.player.player_code;
+            console.log('test_load_character player_code', self.player_code);
+            self.player_loaded = true;
+          }
+        }
+      });
+    },
+    test_reload_character() {
+      let self = this;
+      self.player_code = 766
+      self.test_load_character_res = self.player_code;
+      self.player_loaded = true;
+      console.log('test_reload_character player_code', self.player_code);
+    },
+    test_load_zodiacs() {
+      let self = this;
+      wx.request({
+        url: 'http://127.0.0.1:8000/GameMaster/TestLoadZodiacs/' + self.room_id + '/' + self.player_code,
+        success: function(res) {
+          console.log('test_load_zodiacs', res);
+          if (res.statusCode !== 201) {
+            console.log('test_load_zodiacs Err', res.errMsg);
+          } else {
+            self.curZodiacs = res.data.zodiacs;
+            console.log('test_load_zodiacs', self.curZodiacs);
+          }
+        }
+      });
+    },
+    inspect_zodiac(pk, name) {
+      let self = this;
+      console.log('inspect_zodiac', pk, name);
+      wx.request({
+        url: 'http://127.0.0.1:8000/GameMaster/InspectZodiac/' + pk + '/',
+        success: function(res) {
+          console.log('inspect_zodiac', res);
+          if (res.statusCode !== 200) {
+            console.log('inspect_zodiac Err', res.errMsg);
+          } else {
+            self.inspected_zodiac_res = '验证' + name + '为：' + res.data.genuine ? '真品' : '赝品';
+            self.zodiacs_inspected = true;
+            console.log('inspect_zodiac', self.zodiacs_inspected);
           }
         }
       });
