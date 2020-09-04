@@ -19,7 +19,7 @@
     "@wepy/core": "^2.0.0-alpha.9",
     "@wepy/x": "^2.0.2",
     "miniprogram-slide-view": "0.0.3",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "wepy": "^1.7.2"
   },
   "devDependencies": {
